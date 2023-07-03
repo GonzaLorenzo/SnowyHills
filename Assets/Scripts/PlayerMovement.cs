@@ -12,10 +12,10 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody _rb;
     private bool _isGrounded;
 
-
-    [SerializeField] private float rotationSpeed;
+    [SerializeField] private float _rotationSpeed = 5f;
+    [SerializeField] private float _targetRotationY = 0f;
+    [SerializeField] private float _boardAdjustSpeed;
     [SerializeField] private float _jumpForce;
-    [SerializeField] private float _turnForce;
 
     [Header("Raycast")]
     [SerializeField] private LayerMask _terrainLayer;
@@ -35,12 +35,10 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(transform.position, -transform.up, out hit, _raycastDistance, _terrainLayer))
         {
-            Quaternion targetRotation = Quaternion.FromToRotation(_board.transform.up, hit.normal) * _board.transform.rotation;
+            Quaternion boardTargetRotation = Quaternion.FromToRotation(_board.transform.up, hit.normal) * _board.transform.rotation;
             
-            _board.transform.rotation = Quaternion.Lerp(_board.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            _board.transform.rotation = Quaternion.Lerp(_board.transform.rotation, boardTargetRotation, _boardAdjustSpeed * Time.deltaTime);
             //transform.rotation = targetRotation;
-
-
 
             _isGrounded = true;
         }
@@ -57,10 +55,17 @@ public class PlayerMovement : MonoBehaviour
             _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
         }
 
-        if(Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
-            
+            _targetRotationY += _rotationSpeed * Time.deltaTime;
         }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            _targetRotationY -= _rotationSpeed * Time.deltaTime;
+        }
+
+        Quaternion targetRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, _targetRotationY, transform.rotation.eulerAngles.z);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
     }
 
     void FixedUpdate()

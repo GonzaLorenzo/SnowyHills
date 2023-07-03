@@ -186,7 +186,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 68831014}
-  m_LocalRotation: {x: 0.33100694, y: -0.0000000014104738, z: 4.947675e-10, w: 0.9436283}
+  m_LocalRotation: {x: 0.33100694, y: 0.0000000028257752, z: -9.912281e-10, w: 0.9436283}
   m_LocalPosition: {x: 814, y: 270.52, z: 273.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -551,7 +551,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.33100694, y: -0.0000000014104738, z: 4.947675e-10, w: 0.9436283}
+  m_LocalRotation: {x: 0.33100694, y: 0.0000000028257752, z: -9.912281e-10, w: 0.9436283}
   m_LocalPosition: {x: 814, y: 270.52, z: 273.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1329,7 +1329,7 @@ GameObject:
   - component: {fileID: 1937097836}
   - component: {fileID: 1937097835}
   - component: {fileID: 1937097834}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1490,6 +1490,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2951591535871570977, guid: c124964080360464fbf9d4f6e1960f5c,
+        type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5408603607874259405, guid: c124964080360464fbf9d4f6e1960f5c,
         type: 3}
       propertyPath: speedText
@@ -1512,9 +1517,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5408603607874259405, guid: c124964080360464fbf9d4f6e1960f5c,
         type: 3}
+      propertyPath: _rotationSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5408603607874259405, guid: c124964080360464fbf9d4f6e1960f5c,
+        type: 3}
       propertyPath: isGroundedText
       value: 
       objectReference: {fileID: 69909836}
+    - target: {fileID: 5408603607874259405, guid: c124964080360464fbf9d4f6e1960f5c,
+        type: 3}
+      propertyPath: _boardAdjustSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5408603607874259405, guid: c124964080360464fbf9d4f6e1960f5c,
+        type: 3}
+      propertyPath: _rotationSpeedAirMultiplier
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
