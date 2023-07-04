@@ -152,23 +152,39 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckCurrentBoard()
     {
-        /* if(_frontBoard.transform.position.y < _rearBoard.transform.position.y)
+        //Funciona mejor pero no es esto.
+        /* if(Vector3.Distance(_frontBoard.transform.position, _rb.velocity) < Vector3.Distance(_rearBoard.transform.position, _rb.velocity))
         {
-            _currentBoard = _frontBoard;
+            _currentBoard = _rearBoard;
         }
         else
         {
-            _currentBoard = _rearBoard;
+            _currentBoard = _frontBoard;
         } */
 
-        //Funciona mejor pero no es esto.
-        if(Vector3.Distance(_frontBoard.transform.position, _rb.velocity) < Vector3.Distance(_rearBoard.transform.position, _rb.velocity))
+        //Prueba con _rb.velocity.normalized. Un toque mejor que sin normalized pero mal igual.
+        /* if(Vector3.Distance(_frontBoard.transform.position, _rb.velocity.normalized) < Vector3.Distance(_rearBoard.transform.position, _rb.velocity.normalized))
         {
             _currentBoard = _rearBoard;
         }
         else
         {
             _currentBoard = _frontBoard;
+        } */
+
+        //Prueba con producto punto. Parece ser esto.
+        Vector3 velocityDirection = _rb.velocity.normalized;
+
+        float frontDot = Vector3.Dot(_frontBoard.transform.forward, velocityDirection);
+        float rearDot = Vector3.Dot(_rearBoard.transform.forward, velocityDirection);
+
+        if (frontDot > rearDot)
+        {
+            _currentBoard = _frontBoard;
+        }
+        else
+        {
+            _currentBoard = _rearBoard;
         }
     }
 
