@@ -18,8 +18,11 @@ public class PlayerMovement : MonoBehaviour
 
     //BOOL DE TESTEO.
     public bool hasLost = false;
+    public bool switchGamemode = false;
     //BOOL DE TESTEO.
 
+    [SerializeField] private float _maxSpeed;
+    [SerializeField] private float _forwardForce;
     [SerializeField] private float _jumpForce;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _airRotationSpeed;
@@ -71,6 +74,21 @@ public class PlayerMovement : MonoBehaviour
         speedText.text = "Speed: " + _rb.velocity.magnitude;
         velocityText.text = "Velocity: " + _rb.velocity;
         isGroundedText.text = "Is Grounded: " + _isGrounded;
+        
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            if(switchGamemode)
+            {
+                switchGamemode = false;
+                hasLostText.text = "Gamemode: Acceleration";
+            }
+            else
+            {
+                switchGamemode = true;
+                hasLostText.text = "Gamemode: Force";
+            }
+            
+        }
 
         if(_isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
@@ -128,12 +146,34 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isGrounded)
         {
-            //Vector3 forwardDirection = _frontBoard.transform.forward;
-            Vector3 forwardDirection = _currentBoard.transform.forward;
-            float yVelocity = _rb.velocity.y;
-            _rb.velocity = forwardDirection * _rb.velocity.magnitude;
-            _rb.velocity = new Vector3(_rb.velocity.x, yVelocity, _rb.velocity.z);
+            if (_rb.velocity.magnitude > _maxSpeed)
+            {
+                _rb.velocity = _rb.velocity.normalized * _maxSpeed;
+            }
 
+            //Modo de fuerza viejo.
+
+            /* Vector3 forwardDirection = _currentBoard.transform.forward;
+                float yVelocity = _rb.velocity.y;
+                _rb.velocity = forwardDirection * _rb.velocity.magnitude;
+                _rb.velocity = new Vector3(_rb.velocity.x, yVelocity, _rb.velocity.z); */
+
+            if(switchGamemode)
+            {   
+                //Creo que es mejor el Force.
+                Vector3 forwardDirection = _currentBoard.transform.forward;
+                _rb.AddForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Force);
+            }
+            else
+            {
+                Vector3 forwardDirection = _currentBoard.transform.forward;
+                //_rb.AddRelativeForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Force);
+                _rb.AddForceAtPosition(forwardDirection * _forwardForce * Time.deltaTime, _currentBoard.transform.position, ForceMode.Force);
+
+
+                //Vector3 forwardDirection = _currentBoard.transform.forward;
+                //_rb.AddForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Acceleration);
+            }
             //Probar agregar una fuerza hacia el forwardDirection. Para que sea mas pesado el giro.
         }
     }
