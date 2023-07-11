@@ -9,25 +9,30 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject _board;
     [SerializeField] private GameObject _frontBoard;
     [SerializeField] private GameObject _rearBoard;
-
-    [SerializeField] private GameObject _currentBoard;
+    [SerializeField] private ParticleSystem _snowTrail;
+    private GameObject _currentBoard;
 
     private Rigidbody _rb;
     private bool _isGrounded;
     private bool _launchRaycast = true;
 
     //BOOL DE TESTEO.
-    public bool hasLost = false;
-    public bool switchGamemode = false;
+    private bool hasLost = false;
+    private bool switchGamemode = false;
     //BOOL DE TESTEO.
 
+    [Header("Movement Numbers")]
     [SerializeField] private float _maxSpeed;
     [SerializeField] private float _forwardForce;
+    [SerializeField] private float _backwardsForce;
+    [SerializeField] private float _parallelForce;
     [SerializeField] private float _jumpForce;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _airRotationSpeed;
     private float _targetRotationY = 0f;
     private float _targetRotationX = 0f;
+
+    [Header("Motion Adjustment")]
     [SerializeField] private float _boardAdjustSpeed;
     [SerializeField] private float _playerAdjustSpeed;
     
@@ -64,10 +69,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 CheckCurrentBoard();
                 _isGrounded = true;
+                _snowTrail.Play();
             }
         }
         else
         {
+            if(_snowTrail.isPlaying)
+            {
+                _snowTrail.Stop();
+            }
             _isGrounded = false;
         }
 
@@ -98,6 +108,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
         {
+            _rb.AddForce(-_currentBoard.transform.forward * _backwardsForce * Time.deltaTime, ForceMode.Force);
+            _rb.AddForce(_currentBoard.transform.right * _parallelForce * Time.deltaTime, ForceMode.Force);
             if(_isGrounded)
             {
                 _targetRotationY += _rotationSpeed * Time.deltaTime;
@@ -110,6 +122,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.A))
         {
+            _rb.AddForce(-_currentBoard.transform.forward * _backwardsForce * Time.deltaTime, ForceMode.Force);
+            _rb.AddForce(-_currentBoard.transform.right * _parallelForce * Time.deltaTime, ForceMode.Force);
             if(_isGrounded)
             {
                 _targetRotationY -= _rotationSpeed * Time.deltaTime;
@@ -158,7 +172,12 @@ public class PlayerMovement : MonoBehaviour
                 _rb.velocity = forwardDirection * _rb.velocity.magnitude;
                 _rb.velocity = new Vector3(_rb.velocity.x, yVelocity, _rb.velocity.z); */
 
-            if(switchGamemode)
+            //Modo de fuerza viejo.
+
+            Vector3 forwardDirection = _currentBoard.transform.forward;
+            _rb.AddForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Force);
+
+            /* if(switchGamemode)
             {   
                 //Creo que es mejor el Force.
                 Vector3 forwardDirection = _currentBoard.transform.forward;
@@ -168,13 +187,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vector3 forwardDirection = _currentBoard.transform.forward;
                 //_rb.AddRelativeForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Force);
-                _rb.AddForceAtPosition(forwardDirection * _forwardForce * Time.deltaTime, _currentBoard.transform.position, ForceMode.Force);
+                //_rb.AddForceAtPosition(forwardDirection * _forwardForce * Time.deltaTime, _currentBoard.transform.position, ForceMode.Force);
 
 
                 //Vector3 forwardDirection = _currentBoard.transform.forward;
                 //_rb.AddForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Acceleration);
-            }
-            //Probar agregar una fuerza hacia el forwardDirection. Para que sea mas pesado el giro.
+            } */
         }
     }
 
