@@ -84,21 +84,6 @@ public class PlayerMovement : MonoBehaviour
         speedText.text = "Speed: " + _rb.velocity.magnitude;
         velocityText.text = "Velocity: " + _rb.velocity;
         isGroundedText.text = "Is Grounded: " + _isGrounded;
-        
-        if(Input.GetKeyDown(KeyCode.Q))
-        {
-            if(switchGamemode)
-            {
-                switchGamemode = false;
-                hasLostText.text = "Gamemode: Acceleration";
-            }
-            else
-            {
-                switchGamemode = true;
-                hasLostText.text = "Gamemode: Force";
-            }
-            
-        }
 
         if(_isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
@@ -134,14 +119,8 @@ public class PlayerMovement : MonoBehaviour
             }
             
         }
-        /* if(!_isGrounded && Input.GetKey(KeyCode.S)) Encontrar la forma de rotar en eje x en el aire.
-        {
-            _targetRotationX += _airRotationSpeed * Time.deltaTime;
-        }
-        if(!_isGrounded && Input.GetKey(KeyCode.W))
-        {
-            _targetRotationX -= _airRotationSpeed * Time.deltaTime;
-        } */
+
+        //_targetRotationY = Mathf.Clamp(_targetRotationY, -45f, 45f); Sirve pero hay que poner los numeros a mano en la montaña final
 
         if(_isGrounded)
         {
@@ -153,7 +132,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, _targetRotationY, transform.rotation.eulerAngles.z);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * _airRotationSpeed);
         }
-        
     }
 
     void FixedUpdate()
@@ -165,34 +143,8 @@ public class PlayerMovement : MonoBehaviour
                 _rb.velocity = _rb.velocity.normalized * _maxSpeed;
             }
 
-            //Modo de fuerza viejo.
-
-            /* Vector3 forwardDirection = _currentBoard.transform.forward;
-                float yVelocity = _rb.velocity.y;
-                _rb.velocity = forwardDirection * _rb.velocity.magnitude;
-                _rb.velocity = new Vector3(_rb.velocity.x, yVelocity, _rb.velocity.z); */
-
-            //Modo de fuerza viejo.
-
             Vector3 forwardDirection = _currentBoard.transform.forward;
             _rb.AddForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Force);
-
-            /* if(switchGamemode)
-            {   
-                //Creo que es mejor el Force.
-                Vector3 forwardDirection = _currentBoard.transform.forward;
-                _rb.AddForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Force);
-            }
-            else
-            {
-                Vector3 forwardDirection = _currentBoard.transform.forward;
-                //_rb.AddRelativeForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Force);
-                //_rb.AddForceAtPosition(forwardDirection * _forwardForce * Time.deltaTime, _currentBoard.transform.position, ForceMode.Force);
-
-
-                //Vector3 forwardDirection = _currentBoard.transform.forward;
-                //_rb.AddForce(forwardDirection * _forwardForce * Time.deltaTime, ForceMode.Acceleration);
-            } */
         }
     }
 
@@ -210,26 +162,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckCurrentBoard()
     {
-        //Funciona mejor pero no es esto.
-        /* if(Vector3.Distance(_frontBoard.transform.position, _rb.velocity) < Vector3.Distance(_rearBoard.transform.position, _rb.velocity))
-        {
-            _currentBoard = _rearBoard;
-        }
-        else
-        {
-            _currentBoard = _frontBoard;
-        } */
-
-        //Prueba con _rb.velocity.normalized. Un toque mejor que sin normalized pero mal igual.
-        /* if(Vector3.Distance(_frontBoard.transform.position, _rb.velocity.normalized) < Vector3.Distance(_rearBoard.transform.position, _rb.velocity.normalized))
-        {
-            _currentBoard = _rearBoard;
-        }
-        else
-        {
-            _currentBoard = _frontBoard;
-        } */
-
         //Prueba con producto punto. Parece ser esto.
         Vector3 velocityDirection = _rb.velocity.normalized;
 

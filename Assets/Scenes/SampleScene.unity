@@ -1396,7 +1396,7 @@ MonoBehaviour:
   _rearBoard: {fileID: 1217158342}
   _snowTrail: {fileID: 1213935939}
   _maxSpeed: 20
-  _forwardForce: 700
+  _forwardForce: 5000
   _backwardsForce: 250
   _parallelForce: 50
   _jumpForce: 10
