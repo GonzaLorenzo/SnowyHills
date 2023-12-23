@@ -11,7 +11,7 @@ public class CharacterTracker : MonoBehaviour
         transform.position = player.transform.position;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         transform.position = player.transform.position;
     }
